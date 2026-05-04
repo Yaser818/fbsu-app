@@ -73,7 +73,7 @@ def evaluate():
         if not client:
             return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
         response = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
