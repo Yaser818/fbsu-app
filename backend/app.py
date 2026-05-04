@@ -10,11 +10,11 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 frontend_dir = os.path.abspath(os.path.join(base_dir, '../frontend'))
 app = Flask(__name__, static_folder=frontend_dir)
 CORS(app) # Enable CORS for all routes
-# Initialize OpenAI client safely
-api_key = os.getenv("OPENAI_API_KEY")
+# Initialize Groq client safely (using OpenAI library)
+api_key = os.environ.get("GROQ_API_KEY")
 client = None
-if api_key and api_key != "your_openai_api_key_here":
-    client = OpenAI(api_key=api_key)
+if api_key and api_key != "your_groq_api_key_here":
+    client = OpenAI(api_key=api_key, base_url="https://api.groq.com/openai/v1")
 @app.route('/')
 def index():
     return send_from_directory(app.static_folder, 'index.html')
@@ -71,9 +71,9 @@ def evaluate():
     """
     try:
         if not client:
-            return jsonify({"error": "OpenAI API key is missing. Please add it to the backend/.env file."}), 500
+            return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="llama3-8b-8192",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
