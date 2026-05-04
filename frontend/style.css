@@ -26,3 +26,13 @@
 #radarChart {
     filter: drop-shadow(0 0 10px rgba(0, 180, 104, 0.15));
 }
+body {
+    direction: rtl;
+    text-align: right;
+}
+
+#evaluation-result, .evaluation-card, p, h3 {
+    direction: rtl !important;
+    text-align: right !important;
+    unicode-bidi: plaintext !important;
+}
