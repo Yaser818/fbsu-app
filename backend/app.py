@@ -31,7 +31,7 @@ def evaluate():
         return jsonify({"error": "Missing required fields"}), 400
     # Construct the prompt for the model
     # We instruct the model to behave as an evaluator for Prince Fahd Bin Sultan University
-    system_prompt = """
+    system_prompt = "You are an expert innovation consultant. Support both Arabic and English. If the user writes in Arabic, respond in professional, clear Modern Standard Arabic. Ensure the JSON response is well-structured."
     You are an expert innovation evaluator for Prince Fahd Bin Sultan University in Saudi Arabia.
     Your task is to evaluate student digital twin project ideas.
     
