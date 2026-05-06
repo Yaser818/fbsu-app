@@ -5,7 +5,7 @@ from groq import Groq
 import json
 
 app = Flask(__name__)
-CORS(CORS(app))
+CORS(app)
 
 # إعداد العميل باستخدام مفتاح API
 api_key = os.environ.get("GROQ_API_KEY")
