@@ -1,60 +1,39 @@
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from groq import Groq
 import json
-from openai import OpenAI
-from dotenv import load_dotenv
-# Load environment variables
-load_dotenv()
-base_dir = os.path.dirname(os.path.abspath(__file__))
-frontend_dir = os.path.abspath(os.path.join(base_dir, '../frontend'))
-app = Flask(__name__, static_folder=frontend_dir)
-CORS(app) # Enable CORS for all routes
-# Initialize Groq client safely (using OpenAI library)
+
+app = Flask(__name__)
+CORS(CORS(app))
+
+# إعداد العميل باستخدام مفتاح API
 api_key = os.environ.get("GROQ_API_KEY")
-client = None
-if api_key and api_key != "your_groq_api_key_here":
-    client = OpenAI(api_key=api_key, base_url="https://api.groq.com/openai/v1")
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory(app.static_folder, path)
-@app.route('/api/evaluate', methods=['POST'])
+client = Groq(api_key=api_key) if api_key else None
+
+@app.route('/evaluate', methods=['POST'])
 def evaluate():
-    data = request.json
-    idea = data.get('idea')
+    data = request.get_json()
+    title = data.get('title')
     problem = data.get('problem')
     beneficiary = data.get('beneficiary')
-    if not all([idea, problem, beneficiary]):
-        return jsonify({"error": "Missing required fields"}), 400
-    # Construct the prompt for the model
-    # We instruct the model to behave as an evaluator for Prince Fahd Bin Sultan University
-    system_prompt = """You are an expert innovation consultant specializing in Digital Twins.
-Your task is to evaluate student ideas and provide a structured JSON response.
-You MUST include these specific fields in your JSON:
-1. "innovation": score 1-10
-2. "feasibility": score 1-10
-3. "human_impact": score 1-10
-4. "beneficiary_value": score 1-10
-5. "sdg_alignment": score 1-10
-6. "weaknesses": A paragraph about market context and weaknesses.
-7. "human_impact_analysis": A paragraph about social impact.
-8. "sdg_analysis": A paragraph about SDG alignment.
-9. "short_term_dev": Practical steps to develop this idea in the next 3-6 months (In Arabic).
-10. "long_term_vision": How this idea can grow and sustain over the next 5 years (In Arabic).
 
-IMPORTANT: Respond in the same language as the user. If the user writes in Arabic, all analysis and development steps must be in clear, professional Arabic."""
-    user_prompt = f"""
-      Evaluate the following student idea:
-      Idea: {idea}
-      Problem Addressed: {problem}
-      Beneficiary: {beneficiary}
-      """
+    system_prompt = (
+        "أنت مستشار ابتكار خبير في جامعة الأمير فهد بن سلطان. "
+        "مهمتك تقييم أفكار المشاريع وتطويرها. "
+        "يجب أن يكون الرد بصيغة JSON حصراً ويحتوي على الحقول التالية باللغة العربية: "
+        "Innovation (درجة من 10), Feasibility (درجة من 10), "
+        "Market Potential (درجة من 10), Impact (درجة من 10), "
+        "improvement_tips (نصائح تطويرية عملية), "
+        "tech_stack (الأدوات واللغات البرمجية المقترحة), "
+        "future_vision (كيف تتوسع الفكرة مستقبلاً)."
+    )
+
+    user_prompt = f"اسم الفكرة: {title}\nالمشكلة: {problem}\nالمستفيد: {beneficiary}"
+
     try:
         if not client:
-            return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
+            return jsonify({"error": "Groq API key is missing."}), 500
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
@@ -71,7 +50,7 @@ IMPORTANT: Respond in the same language as the user. If the user writes in Arabi
         return jsonify(result_json)
 
     except Exception as e:
-        print(f"Error during evaluation: {e}")
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
