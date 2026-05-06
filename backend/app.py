@@ -47,12 +47,12 @@ You MUST include these specific fields in your JSON:
 
 IMPORTANT: Respond in the same language as the user. If the user writes in Arabic, all analysis and development steps must be in clear, professional Arabic."""
    
-      user_prompt = f"""
+ user_prompt = f"""
       Evaluate the following student idea:
-    Idea: {idea}
-    Problem Addressed: {problem}
-    Beneficiary: {beneficiary}
-    """
+      Idea: {idea}
+      Problem Addressed: {problem}
+      Beneficiary: {beneficiary}
+      """
   try:
             if not client:
                 return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
