@@ -100,7 +100,10 @@ async def evaluate(request: EvaluationRequest):
         result_content = response.choices[0].message.content
         result_json = json.loads(result_content)
         
-        return result_json
+        from fastapi.responses import
+JSONResponse
+        return
+JSONResponse(content=result_json)
 
     except Exception as e:
         print(f"Error calling Groq API: {e}")
