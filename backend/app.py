@@ -46,31 +46,30 @@ You MUST include these specific fields in your JSON:
 10. "long_term_vision": How this idea can grow and sustain over the next 5 years (In Arabic).
 
 IMPORTANT: Respond in the same language as the user. If the user writes in Arabic, all analysis and development steps must be in clear, professional Arabic."""
-   
- user_prompt = f"""
+    user_prompt = f"""
       Evaluate the following student idea:
       Idea: {idea}
       Problem Addressed: {problem}
       Beneficiary: {beneficiary}
       """
-  try:
-            if not client:
-                return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
+    try:
+        if not client:
+        return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
            
-            response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                response_format={ "type": "json_object" },
-                temperature=0.7
-            )
+        response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt}
+        ],
+        response_format={ "type": "json_object" },
+        temperature=0.7
+        )
            
-            result_content = response.choices[0].message.content
-            result_json = json.loads(result_content)
+        result_content = response.choices[0].message.content
+        result_json = json.loads(result_content)
            
-            return jsonify(result_json)
+        return jsonify(result_json)
            
         except Exception as e:
             print(f"Error during evaluation: {e}")
