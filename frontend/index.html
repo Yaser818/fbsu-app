@@ -1,58 +1,153 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr" class="scroll-smooth font-en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FBSU Innovation Lab | مختبر الابتكار</title>
-    <link rel="stylesheet"href="./style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>FBSU Innovation Evaluator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Prince Fahd Bin Sultan University Digital Twin Innovation Evaluator.">
+    
+    <!-- Google Fonts (Outfit for English, Tajawal for Arabic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        en: ['Outfit', 'sans-serif'],
+                        ar: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        fbsu: {
+                            dark: '#0a192f',
+                            card: '#112240',
+                            green: '#00b468',
+                            gold: '#d4af37',
+                            light: '#e6f1ff',
+                            slate: '#8892b0'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS (Direct Path) -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>FBSU Innovation Evaluator</h1>
-            <p>مختبر جامعة الأمير فهد بن سلطان لتقييم وتطوير الأفكار</p>
+<body class="bg-fbsu-dark text-fbsu-light min-h-screen antialiased flex flex-col items-center relative overflow-x-hidden">
+    
+    <!-- Language Toggle -->
+    <div class="absolute top-4 right-4 md:top-8 md:right-8 z-50">
+        <button id="langToggle" class="bg-fbsu-card/80 backdrop-blur border border-white/10 hover:border-fbsu-green/50 text-white px-5 py-2 rounded-full font-semibold transition-all shadow-lg flex items-center gap-2">
+            <span id="langIcon" class="text-fbsu-green text-lg">ع</span>
+            <span id="langText">العربية</span>
+        </button>
+    </div>
+
+    <!-- Background glow effects -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-fbsu-green/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fbsu-gold/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <main class="w-full max-w-6xl mx-auto px-6 py-12 relative z-10 flex flex-col gap-12 mt-10 md:mt-0">
+        
+        <!-- Header Section -->
+        <header class="text-center space-y-4 pt-8">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-fbsu-green/10 border border-fbsu-green/30 text-fbsu-green text-sm font-semibold tracking-wider mb-4 shadow-glow" data-en="PRINCE FAHD BIN SULTAN UNIVERSITY" data-ar="جامعة الأمير فهد بن سلطان">
+                PRINCE FAHD BIN SULTAN UNIVERSITY
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-md flex flex-wrap justify-center gap-2">
+                <span data-en="Digital Twin" data-ar="التوأمة">Digital Twin</span> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-fbsu-green to-emerald-400" data-en="Evaluator" data-ar="الرقمية">Evaluator</span>
+            </h1>
+            <p class="text-fbsu-slate text-base md:text-lg max-w-2xl mx-auto leading-relaxed" data-en="Submit your innovative digital twin concept. Our AI will analyze its feasibility, human impact in Tabuk, and alignment with Sustainable Development Goals." data-ar="قدم فكرتك المبتكرة للتوأمة الرقمية. سيقوم الذكاء الاصطناعي بتحليل جدواها، وتأثيرها البشري في تبوك، ومواءمتها مع أهداف التنمية المستدامة.">
+                Submit your innovative digital twin concept. Our AI will analyze its feasibility, human impact in Tabuk, and alignment with Sustainable Development Goals.
+            </p>
         </header>
 
-        <main>
-            <section class="input-section">
-                <input type="text" id="ideaTitle" placeholder="اسم فكرة المشروع...">
-                <textarea id="problemStatement" placeholder="ما هي المشكلة التي يحلها المشروع؟"></textarea>
-                <textarea id="targetBeneficiary" placeholder="من هي الفئة المستهدفة؟"></textarea>
-                <button id="evaluateBtn" onclick="evaluateIdea()">تحليل وتطوير الفكرة <i class="fas fa-magic"></i></button>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start w-full mt-4 md:mt-8">
+            
+            <!-- Input Form Section -->
+            <section class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden group border border-white/5 transition-all duration-300 hover:border-fbsu-green/30">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-fbsu-green"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+                    <span data-en="Project Details" data-ar="تفاصيل المشروع">Project Details</span>
+                </h2>
+                
+                <form id="evaluationForm" class="space-y-6">
+                    <div class="space-y-2">
+                        <label for="idea" class="block text-sm font-medium text-fbsu-light" data-en="Your Digital Twin Idea" data-ar="فكرة التوأمة الرقمية">Your Digital Twin Idea</label>
+                        <textarea id="idea" name="idea" rows="4" required data-placeholder-en="Describe your digital twin concept..." data-placeholder-ar="صف فكرة التوأمة الرقمية الخاصة بك..." placeholder="Describe your digital twin concept..." class="w-full bg-fbsu-card/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fbsu-green/50 focus:border-transparent transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="problem" class="block text-sm font-medium text-fbsu-light" data-en="Problem Addressed" data-ar="المشكلة المستهدفة">Problem Addressed</label>
+                        <p class="text-xs text-fbsu-slate mb-2" data-en="What human suffering or challenge does this idea address?" data-ar="ما هي المعاناة أو التحدي الذي تعالجه هذه الفكرة؟">What human suffering or challenge does this idea address?</p>
+                        <textarea id="problem" name="problem" rows="3" required data-placeholder-en="e.g., Traffic congestion leading to delayed emergency responses..." data-placeholder-ar="مثال: الازدحام المروري الذي يؤدي إلى تأخر استجابة الطوارئ..." placeholder="e.g., Traffic congestion leading to delayed emergency responses..." class="w-full bg-fbsu-card/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fbsu-green/50 focus:border-transparent transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="beneficiary" class="block text-sm font-medium text-fbsu-light" data-en="Primary Beneficiary" data-ar="المستفيد الأول">Primary Beneficiary</label>
+                        <p class="text-xs text-fbsu-slate mb-2" data-en="Who is the person whose life will change (e.g., in Tabuk)?" data-ar="من هو الشخص الذي ستتغير حياته (مثال: في تبوك)؟">Who is the person whose life will change (e.g., in Tabuk)?</p>
+                        <input type="text" id="beneficiary" name="beneficiary" required data-placeholder-en="e.g., Daily commuters in Tabuk" data-placeholder-ar="مثال: المسافرون يومياً في تبوك" placeholder="e.g., Daily commuters in Tabuk" class="w-full bg-fbsu-card/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-fbsu-green/50 focus:border-transparent transition-all">
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-fbsu-green to-emerald-500 hover:from-emerald-400 hover:to-emerald-300 text-fbsu-dark font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,180,104,0.4)] flex justify-center items-center gap-2">
+                        <span id="submitText" data-en="Evaluate Impact" data-ar="تقييم الأثر">Evaluate Impact</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                </form>
             </section>
 
-            <div id="loading" class="hidden">
-                <div class="spinner"></div>
-                <p>جاري تحليل الفكرة وبناء خارطة الطريق...</p>
-            </div>
+            <!-- Results Section -->
+            <section id="resultsSection" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl relative border border-white/5 flex flex-col h-full min-h-[600px] transition-all duration-500 opacity-50 blur-[2px] pointer-events-none">
+                
+                <!-- Loading Overlay -->
+                <div id="loadingState" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-fbsu-dark/80 backdrop-blur-sm rounded-3xl opacity-0 pointer-events-none transition-opacity duration-300">
+                    <div class="relative w-20 h-20">
+                        <div class="absolute inset-0 border-4 border-fbsu-green/20 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-fbsu-green rounded-full border-t-transparent animate-spin"></div>
+                    </div>
+                    <p class="mt-6 text-fbsu-green font-medium tracking-wide animate-pulse" id="loadingText" data-en="AI is analyzing alignment..." data-ar="الذكاء الاصطناعي يحلل التوافق...">AI is analyzing alignment...</p>
+                </div>
 
-            <section id="results" class="hidden">
-                <h2>نتائج التحليل والتوصيات</h2>
-               
-                <div class="scores-grid" id="scoresGrid"></div>
-
-                <hr>
-
-                <div class="development-lab">
-                    <div class="dev-card improvement">
-                        <h3><i class="fas fa-lightbulb"></i> مقترحات لتطوير الفكرة</h3>
-                        <div id="improvementContent"></div>
+                <div class="flex flex-col h-full z-10 space-y-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-fbsu-gold"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        <span data-en="Evaluation Matrix" data-ar="مصفوفة التقييم">Evaluation Matrix</span>
+                    </h2>
+                    
+                    <!-- Radar Chart Container -->
+                    <div class="relative w-full aspect-square max-h-[350px] mx-auto flex-grow flex items-center justify-center">
+                        <canvas id="radarChart"></canvas>
                     </div>
 
-                    <div class="dev-card technical">
-                        <h3><i class="fas fa-code"></i> الأدوات التقنية المقترحة</h3>
-                        <div id="techContent"></div>
-                    </div>
-
-                    <div class="dev-card vision">
-                        <h3><i class="fas fa-rocket"></i> الرؤية المستقبلية (الاستدامة)</h3>
-                        <div id="visionContent"></div>
+                    <!-- Feedback Container -->
+                    <div id="feedbackContainer" class="space-y-4 mt-auto">
+                        <div class="text-center text-fbsu-slate italic" id="awaitingText" data-en="Awaiting submission..." data-ar="في انتظار التقديم...">Awaiting submission...</div>
                     </div>
                 </div>
             </section>
-        </main>
-    </div>
+
+        </div>
+    </main>
+
+    <!-- Custom Script (Direct Path) -->
     <script src="script.js"></script>
 </body>
 </html>
