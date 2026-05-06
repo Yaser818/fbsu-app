@@ -31,7 +31,7 @@ def evaluate():
         return jsonify({"error": "Missing required fields"}), 400
     # Construct the prompt for the model
     # We instruct the model to behave as an evaluator for Prince Fahd Bin Sultan University
-   system_prompt = """You are an expert innovation consultant specializing in Digital Twins.
+     system_prompt = """You are an expert innovation consultant specializing in Digital Twins.
 Your task is to evaluate student ideas and provide a structured JSON response.
 You MUST include these specific fields in your JSON:
 1. "innovation": score 1-10
@@ -47,24 +47,7 @@ You MUST include these specific fields in your JSON:
 
 IMPORTANT: Respond in the same language as the user. If the user writes in Arabic, all analysis and development steps must be in clear, professional Arabic."""
    
-    Please search your knowledge base for similar digital twin projects in Saudi Arabia, identify their weaknesses, and compare.
-    
-    You MUST return the response strictly as a JSON object with the following schema (keep the keys in English):
-    {
-      "scores": {
-        "innovation": number,
-        "feasibility": number,
-        "human_impact": number,
-        "beneficiary_value": number,
-        "sdg_alignment": number
-      },
-      "feedback": {
-        "weaknesses": "A brief paragraph describing weaknesses and similar projects in KSA.",
-        "human_impact_analysis": "A brief paragraph evaluating the human impact.",
-        "sdg_alignment_analysis": "A brief paragraph explaining which SDGs are addressed."
-      }
-    }
-    """
+  
     user_prompt = f"""
     Evaluate the following student idea:
     Idea: {idea}
