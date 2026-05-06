@@ -54,23 +54,25 @@ IMPORTANT: Respond in the same language as the user. If the user writes in Arabi
       """
     try:
         if not client:
-        return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
+            return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
 
         response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt}
-        ],
-        response_format={"type": "json_object"},
-        temperature=0.7
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.7
         )
+
         result_content = response.choices[0].message.content
         result_json = json.loads(result_content)
-
         return jsonify(result_json)
+
     except Exception as e:
         print(f"Error during evaluation: {e}")
         return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
-app.run(host='0.0.0.0', debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)
