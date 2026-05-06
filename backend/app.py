@@ -101,7 +101,7 @@ async def evaluate(request: EvaluationRequest):
         result_json = json.loads(result_content)
         
         from fastapi.responses import JSONResponse
-      return JSONResponse(content=result_json, media_type="application/json")
+        return JSONResponse(content=result_json, media_type="application/json")
 
 
     except Exception as e:
