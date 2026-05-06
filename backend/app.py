@@ -31,7 +31,7 @@ def evaluate():
         return jsonify({"error": "Missing required fields"}), 400
     # Construct the prompt for the model
     # We instruct the model to behave as an evaluator for Prince Fahd Bin Sultan University
-     system_prompt = """You are an expert innovation consultant specializing in Digital Twins.
+    system_prompt = """You are an expert innovation consultant specializing in Digital Twins.
 Your task is to evaluate student ideas and provide a structured JSON response.
 You MUST include these specific fields in your JSON:
 1. "innovation": score 1-10
@@ -54,24 +54,27 @@ IMPORTANT: Respond in the same language as the user. If the user writes in Arabi
     Problem Addressed: {problem}
     Beneficiary: {beneficiary}
     """
-    try:
-        if not client:
-            return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
-        response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            response_format={ "type": "json_object" },
-            temperature=0.7
-        )
-        result_content = response.choices[0].message.content
-        result_json = json.loads(result_content)
-        
-        return jsonify(result_json)
-    except Exception as e:
-        print(f"Error calling OpenAI API: {e}")
-        return jsonify({"error": str(e)}), 500
+  try:
+            if not client:
+                return jsonify({"error": "Groq API key is missing. Please add it to the backend/.env file."}), 500
+           
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                response_format={ "type": "json_object" },
+                temperature=0.7
+            )
+           
+            result_content = response.choices[0].message.content
+            result_json = json.loads(result_content)
+           
+            return jsonify(result_json)
+           
+        except Exception as e:
+            print(f"Error during evaluation: {e}")
+            return jsonify({"error": str(e)}), 500
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=5000)
+app.run(host='0.0.0.0', debug=True, port=5000)
