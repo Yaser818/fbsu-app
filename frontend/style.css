@@ -1,12 +1,15 @@
 /* Custom Styles to complement Tailwind CSS */
+
 .glass-card {
     background: rgba(17, 34, 64, 0.4);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
+
 .shadow-glow {
     box-shadow: 0 0 15px rgba(0, 180, 104, 0.2);
 }
+
 /* Custom Scrollbar for Textareas */
 ::-webkit-scrollbar {
     width: 8px;
@@ -22,17 +25,28 @@
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 180, 104, 0.5);
 }
+
 /* Chart.js tooltip custom styling adjustments */
 #radarChart {
     filter: drop-shadow(0 0 10px rgba(0, 180, 104, 0.15));
 }
-body {
-    direction: rtl;
-    text-align: right;
+
+/* Arabic Typography Enhancements */
+.font-ar {
+    font-family: 'Tajawal', sans-serif !important;
 }
 
-#evaluation-result, .evaluation-card, p, h3 {
-    direction: rtl !important;
-    text-align: right !important;
-    unicode-bidi: plaintext !important;
+.font-en {
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* Right-to-Left (RTL) Specific adjustments */
+[dir="rtl"] .rtl\:mr-0 {
+    margin-right: 0 !important;
+}
+[dir="rtl"] .rtl\:ml-2 {
+    margin-left: 0.5rem !important;
+}
+[dir="rtl"] .rtl\:ml-3 {
+    margin-left: 0.75rem !important;
 }
