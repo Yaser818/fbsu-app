@@ -47,9 +47,8 @@ You MUST include these specific fields in your JSON:
 
 IMPORTANT: Respond in the same language as the user. If the user writes in Arabic, all analysis and development steps must be in clear, professional Arabic."""
    
-  
-    user_prompt = f"""
-    Evaluate the following student idea:
+      user_prompt = f"""
+      Evaluate the following student idea:
     Idea: {idea}
     Problem Addressed: {problem}
     Beneficiary: {beneficiary}
